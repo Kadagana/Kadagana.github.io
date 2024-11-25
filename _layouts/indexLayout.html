@@ -19,33 +19,75 @@
 
   #nav-overlay {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 40px;
+    left: 10px;
     z-index: 2;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(55, 44, 0, 0.25);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  #nav-overlay.collapsed {
+    transform: translateX(-100%); 
+    opacity: 0;
   }
 
   #nav-overlay a {
-    margin-right: 15px;
+    display: block;
+    margin-bottom: 10px;
     text-decoration: none;
-    font-size: 18px;
-    color: #FF77FF; /* Neon Pink */
+    font-size: 20px;
+    color: #FF77FF;
     font-weight: bold;
   }
 
   #nav-overlay a:hover {
     text-decoration: underline;
-    color: #AA55FF; /* Neon Purple */
+    color: #AA55FF;
+  }
+
+  #toggle-nav {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    background-color: #FF77FF;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  #toggle-nav:hover {
+    background-color: #AA55FF;
   }
 </style>
 
-<div id="nav-overlay">
+<div id="nav-overlay" class="collapsed">
   <a href="/projects/">Projects</a>
   <a href="/aboutme/">About Me</a>
   <a href="/contact/">Contact</a>
 </div>
+<button id="toggle-nav">Menu</button>
+<script type="module">
+  const navOverlay = document.getElementById('nav-overlay');
+  const toggleNav = document.getElementById('toggle-nav');
+
+  toggleNav.addEventListener('click', () => {
+    navOverlay.classList.toggle('collapsed');
+    if (navOverlay.classList.contains('collapsed')) {
+      toggleNav.textContent = 'Menu'; // Update button text when collapsed
+    } else {
+      toggleNav.textContent = 'Close'; // Update button text when expanded
+    }
+  });
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js" type="module"></script>
 
