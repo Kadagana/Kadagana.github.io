@@ -19,7 +19,7 @@
 
   #nav-overlay {
     position: absolute;
-    top: 40px;
+    top: 60px;
     left: 10px;
     z-index: 2;
     background-color: rgba(255, 255, 255, 0.3);
@@ -38,7 +38,7 @@
     display: block;
     margin-bottom: 10px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 35px;
     color: #FF77FF;
     font-weight: bold;
   }
@@ -55,18 +55,19 @@
     z-index: 3;
     background-color: #FF77FF;
     color: #fff;
-    font-size: 18px;
+    font-size: 25px;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
     cursor: pointer;
+    opacity: 0.6;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   }
 
   #toggle-nav:hover {
     background-color: #AA55FF;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1000px) {
     #nav-overlay {
       width: 80%; /* Take more screen width on mobile */
       font-size: 40px; /* Adjust text size for smaller screens */
