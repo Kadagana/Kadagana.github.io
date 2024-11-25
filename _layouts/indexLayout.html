@@ -30,7 +30,7 @@
   }
 
   #nav-overlay.collapsed {
-    transform: translateX(-100%); 
+    transform: translateX(-100%);
     opacity: 0;
   }
 
@@ -65,6 +65,23 @@
 
   #toggle-nav:hover {
     background-color: #AA55FF;
+  }
+  @media screen and (max-width: 768px) {
+    #nav-overlay {
+      width: 80%; /* Take more screen width on mobile */
+      font-size: 40px; /* Adjust text size for smaller screens */
+      padding: 25px; /* Add more padding for touch targets */
+    }
+
+    #nav-overlay a {
+      font-size: 40px; /* Slightly larger text for mobile */
+      margin-bottom: 20px; /* Add extra spacing */
+    }
+
+    #toggle-nav {
+      font-size: 40px; /* Bigger toggle button for mobile */
+      padding: 15px 20px; /* Adjust size for easier tap */
+    }
   }
 </style>
 
