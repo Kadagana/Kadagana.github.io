@@ -39,5 +39,9 @@ React, and an express.js backend. I was designated team leader for this project
 due to my experience at GoodJava, Inc.
 
 <div style="text-align: center;">
-  <img src="/assets/images/caterpillar-storefront.gif" alt="Caterpillar Storefront Overview" style="width: 100%; max-width: 600px; border-radius: 10px;">
+  <img src="/assets/images/caterpillar.png" alt="Caterpillar Storefront Overview" style="width: 100%; max-width: 600px; border-radius: 10px;">
 </div>
+<div style="text-align: center;">
+  <img src="/assets/images/mongo.png" alt="Caterpillar Storefront Overview" style="width: 100%; max-width: 600px; border-radius: 10px;">
+</div>
+
