@@ -75,13 +75,13 @@
     }
 
     #nav-overlay a {
-      font-size: 40px; /* Slightly larger text for mobile */
-      margin-bottom: 20px; /* Add extra spacing */
+      font-size: 40px;
+      margin-bottom: 20px;
     }
 
     #toggle-nav {
-      font-size: 40px; /* Bigger toggle button for mobile */
-      padding: 15px 20px; /* Adjust size for easier tap */
+      font-size: 40px;
+      padding: 15px 20px;
     }
   }
 </style>
@@ -89,7 +89,7 @@
 <div id="nav-overlay" class="collapsed">
   <a href="/projects/">Projects</a>
   <a href="/aboutme/">About Me</a>
-  <a href="/contact/">Contact</a>
+  <a href="/resume/">Resume</a>
 </div>
 <button id="toggle-nav">Menu</button>
 <script type="module">
@@ -252,11 +252,30 @@
 
   const projectsLink = document.querySelector('#nav-overlay a[href="/projects/"]');
   const aboutMeLink = document.querySelector('#nav-overlay a[href="/aboutme/"]');
-  const contactLink = document.querySelector('#nav-overlay a[href="/contact/"]');
+  const resumeLink = document.querySelector('#nav-overlay a[href="/resume/"]');
 
   createSphereWithPhysics(2, { x: -6, y: 5, z: 0 }, 0xff00ff, 'Projects', projectsLink);
   createSphereWithPhysics(2, { x: 0, y: 5, z: -6 }, 0x00ffff, 'About Me', aboutMeLink);
-  createSphereWithPhysics(2, { x: 6, y: 5, z: 6 }, 0x77ff77, 'Contact', contactLink);
+  createSphereWithPhysics(2, { x: 6, y: 5, z: 6 }, 0x800000, 'Resume', resumeLink);
+
+  const rotatingCube = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 1, 1),
+          new THREE.MeshStandardMaterial({
+            color: 0xff7700,
+            emissive: 0xff7700,
+            emissiveIntensity: 1,
+            roughness: 0.3
+          })
+  );
+  rotatingCube.castShadow = true;
+  rotatingCube.position.set(0, 11, 0);
+  scene.add(rotatingCube);
+
+
+  function rotateStaticObject(time) {
+    rotatingCube.rotation.y = time * 0.6;
+    rotatingCube.rotation.x = time * 0.4;
+  }
 
   function updatePhysics(delta) {
     world.step(1 / 60, delta, 3);
@@ -268,19 +287,24 @@
   }
 
   const clock = new THREE.Clock();
+
   function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta();
+    const time = clock.getElapsedTime();
+
     updatePhysics(delta);
 
-    const time = clock.getElapsedTime();
-    rotatingLight.position.set(Math.sin(time) * 10, 10, Math.cos(time) * 10);
-
+    rotatingLight.position.set(
+            Math.sin(time) * 10,
+            10,
+            Math.cos(time) * 10
+    );
+    rotateStaticObject(time);
     controls.update();
     renderer.render(scene, camera);
   }
-
   animate();
 
   window.addEventListener('resize', () => {
