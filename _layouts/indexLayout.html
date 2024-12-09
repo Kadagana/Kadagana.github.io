@@ -140,17 +140,23 @@
   gridHelper.material.transparent = true;
   scene.add(gridHelper);
 
-  const ambientLight = new THREE.AmbientLight(0xff77ff, 0.3);
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
   scene.add(ambientLight);
 
-  const rotatingLight = new THREE.PointLight(0xffaa00, 2, 50);
+  const rotatingLight = new THREE.PointLight(0xffaa00, 3, 50);
   rotatingLight.castShadow = true;
-  rotatingLight.shadow.mapSize.width = 1024;
-  rotatingLight.shadow.mapSize.height = 1024;
+  rotatingLight.shadow.mapSize.width = 2048;
+  rotatingLight.shadow.mapSize.height = 2048;
+  rotatingLight.shadow.bias = -0.01;
   scene.add(rotatingLight);
 
+  const spotLight = new THREE.SpotLight(0xffffff, 2, 100, Math.PI / 6, 0.5, 2);
+  spotLight.position.set(10, 20, 10);
+  spotLight.castShadow = true;
+  scene.add(spotLight);
+  
   const world = new CANNON.World();
-  world.gravity.set(0, -9.82, 0);
+  world.gravity.set(0, -9.8, 0);
 
   const groundBody = new CANNON.Body({
     mass: 0,
@@ -171,11 +177,12 @@
   const wallSize = 15;
 
   const walls = [
-    { size: [wallSize, 10, 1], position: [0, 5, wallSize] }, // Front
-    { size: [wallSize, 10, 1], position: [0, 5, -wallSize] }, // Back
-    { size: [1, 10, wallSize], position: [wallSize, 5, 0] }, // Right
-    { size: [1, 10, wallSize], position: [-wallSize, 5, 0] }, // Left
+    { size: [wallSize*2, 10, 1], position: [0, 5, wallSize] }, // Front (relative to the camera)
+    { size: [wallSize*2, 10, 1], position: [0, 5, -wallSize] }, // Back
+    { size: [1, 10, wallSize * 2], position: [wallSize, 5, 0] }, // Right
+    { size: [1, 10, wallSize * 2], position: [-wallSize, 5, 0] }, // Left
   ];
+
 
   walls.forEach(({ size, position }) => {
     const wallBody = new CANNON.Body({
@@ -185,6 +192,18 @@
       position: new CANNON.Vec3(...position),
     });
     world.addBody(wallBody);
+
+
+    const wallMesh = new THREE.Mesh(
+            new THREE.BoxGeometry(size[0], size[1], size[2]),
+            new THREE.MeshStandardMaterial({
+              color: 0xff00ff,
+              transparent: true,
+              opacity: 0.1,
+            })
+    );
+    wallMesh.position.set(...position);
+    scene.add(wallMesh);
   });
 
   const sphereMeshes = [];
@@ -193,11 +212,11 @@
 
   function createSphereWithPhysics(radius, position, color, text, linkElement) {
     const sphereBody = new CANNON.Body({
-      mass: 1,
+      mass: 0.5,
       shape: new CANNON.Sphere(radius),
       position: new CANNON.Vec3(position.x, position.y, position.z),
     });
-    sphereBody.velocity.set(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
+    sphereBody.velocity.set(0.1, 0.1, 0.1);
     world.addBody(sphereBody);
 
     const sphereMesh = new THREE.Mesh(
@@ -205,8 +224,9 @@
             new THREE.MeshStandardMaterial({
               color: color,
               emissive: color,
-              emissiveIntensity: 0.5,
-              roughness: 0.2,
+              emissiveIntensity: 0.3,
+              roughness: 0.1, // Reduced roughness for a shinier look
+              metalness: 0.8, // Added metalness for more reflective surfaces
             })
     );
     sphereMesh.castShadow = true;
@@ -240,9 +260,10 @@
 
       const intersects = raycaster.intersectObjects([sphereMesh]);
       if (intersects.length > 0) {
-        linkElement.click();
+        window.open(linkElement.href, '_blank');
       }
     });
+
 
     sphereMeshes.push(sphereMesh);
     sphereBodies.push(sphereBody);
